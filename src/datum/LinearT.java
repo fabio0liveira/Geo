@@ -11,8 +11,7 @@ import java.util.List;
 public class LinearT {
 
 	/**
-	 * rotX, rotY, rotZ - Rotation for a 3D cartesian dextrogyre system with or
-	 * without translations.
+	 * rotX, rotY, rotZ - Linear transformations for a 3D cartesian dextrogyre system.
 	 * 
 	 * The method receives a list of elements{x,y,z,x,y,z,...} and the angle of
 	 * rotation teta, with negative angles for clockwise rotation and positive
