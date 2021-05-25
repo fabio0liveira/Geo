@@ -12,11 +12,11 @@ public class Program {
 
 		Locale.setDefault(Locale.US);
 
-		//Geocalc geo = new Geocalc(2000);
+		// Geocalc geo = new Geocalc(2000);
 
-		//LinearT linT = new LinearT();
+		// LinearT linT = new LinearT();
 
-		//List<Double> listIn = new ArrayList<>();
+		// List<Double> listIn = new ArrayList<>();
 
 	}
 

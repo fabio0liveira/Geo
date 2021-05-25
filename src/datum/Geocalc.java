@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implements geodesic calculations methods.
+ * This class implements methods for use on geodesic calculations.
  * 
  * @author Fabio Cardoso de Oliveira
  * 
- * @version 1.1
+ * @version 1.2
  * 
  */
 
@@ -128,6 +128,46 @@ public class Geocalc extends Elips {
 
 		return "Ellipsoid-> " + Elips.name + "; Semimajor axis-> " + String.format("%.3f", Elips.a)
 				+ "; Semiminor axis-> " + String.format("%.3f", Elips.b);
+	}
+
+	// CONVERT FROM DD TO DMS
+
+	public Double[] ddTodms(double coord) {
+
+		double sign = 1;
+		double dd;
+		Double[] dms = new Double[3];
+
+		if (coord < 0) {
+			sign = -1;
+		}
+
+		if (coord >= 0) {
+			sign = 1;
+		}
+
+		dd = Math.abs(coord);
+
+		dms[0] = ((dd) - (dd % 1)) * sign;
+		dms[1] = ((dd % 1) * 60) - (((dd % 1) * 60) % 1);
+		dms[2] = (((dd % 1) * 60) % 1) * 60;
+
+		return dms;
+
+	}
+
+	// CONVERT FROM DMS TO DD
+
+	public double dmsTodd(double[] coord) {
+
+		double sign = 1;
+
+		if (coord[0] < 0) {
+			sign = -1;
+		}
+
+		return (Math.abs(coord[0]) + (coord[1] / 60) + (coord[2] / 3600)) * sign;
+
 	}
 
 }
