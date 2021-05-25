@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author Fabio Cardoso de Oliveira
  * 
- * @version 1.2
+ * @version 1.3
  * 
  */
 
@@ -170,7 +170,7 @@ public class Geocalc extends Elips {
 
 	}
 
-	// AREA CALCULATION BY GUASS METHOD LIST{X,Y,X,Y,...}
+	// AREA CALCULATION BY GAUSS METHOD LIST{X,Y,X,Y,...}
 
 	public double gaussArea(List<Double> list) {
 
