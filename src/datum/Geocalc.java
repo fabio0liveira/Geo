@@ -170,4 +170,47 @@ public class Geocalc extends Elips {
 
 	}
 
+	// AREA CALCULATION BY GUASS METHOD LIST{X,Y,X,Y,...}
+
+	public double gaussArea(List<Double> list) {
+
+		double sumX = 0;
+		double sumY = 0;
+
+		for (int i = 0; i < list.size(); i++) {
+
+			if (i % 2 == 0) { // X element
+
+				if (i <= (list.size() - 4)) {
+
+					sumX = sumX + (list.get(i) * list.get(i + 3));
+
+				}
+				if (i == (list.size() - 2)) { // last X element
+
+					sumX = sumX + (list.get(i) * list.get(1));
+				}
+
+			}
+
+			if (i % 2 == 1) { // Y element
+
+				if (i <= (list.size() - 3)) {
+
+					sumY = sumY + (list.get(i) * list.get(i + 1));
+
+				}
+				if (i == (list.size() - 1)) { // last Y element
+
+					sumY = sumY + (list.get(i) * list.get(0));
+				}
+
+			}
+
+		}
+
+		return Math.abs((sumX - sumY) / 2);
+
+	}
+
 }
