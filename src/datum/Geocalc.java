@@ -1,7 +1,10 @@
 package datum;
 
 import java.util.ArrayList;
+
 import java.util.List;
+
+import datum.LinearT;
 
 /**
  * This class implements methods for use on geodesic calculations.
@@ -98,7 +101,7 @@ public class Geocalc extends Elips {
 		double factor;
 
 		// GETS UTM ZONE AND CALCULATES CENTRAL MERIDIAN VALUE.
-		// !!! cálculos aproximados. melhorar.
+		// !!! cálculos aproximados. melhorar!!!!.
 
 		if (lambda >= 0) {
 			mC = (((lambda / 6) - ((lambda / 6) % 1)) * 6) + 3;
@@ -183,12 +186,12 @@ public class Geocalc extends Elips {
 
 				if (i <= (list.size() - 4)) {
 
-					sumX = sumX + (list.get(i) * list.get(i + 3));
+					sumX += (list.get(i) * list.get(i + 3));
 
 				}
 				if (i == (list.size() - 2)) { // last X element
 
-					sumX = sumX + (list.get(i) * list.get(1));
+					sumX += (list.get(i) * list.get(1));
 				}
 
 			}
@@ -197,12 +200,12 @@ public class Geocalc extends Elips {
 
 				if (i <= (list.size() - 3)) {
 
-					sumY = sumY + (list.get(i) * list.get(i + 1));
+					sumY += (list.get(i) * list.get(i + 1));
 
 				}
 				if (i == (list.size() - 1)) { // last Y element
 
-					sumY = sumY + (list.get(i) * list.get(0));
+					sumY += (list.get(i) * list.get(0));
 				}
 
 			}
@@ -211,6 +214,44 @@ public class Geocalc extends Elips {
 
 		return Math.abs((sumX - sumY) / 2);
 
+	}
+
+	// FROM DD {lat,long,h,lat,long,h,...} TO TOPOCENTRIC HORIZON COORDINATE SYSTEM
+	// {E,N,U,E,N,U,...} ORIGIN OF TH SYSTEM IS THE MEAN {LAT,LONG,0} COORDS
+	
+	//!!! not finished yet!!!
+
+	public List<Double> ddToHorizon(List<Double> listIn) {
+
+		List<Double> listOut = new ArrayList<>();
+		List<Double> listR1 = new ArrayList<>();
+		List<Double> listR2 = new ArrayList<>();
+		List<Double> listMean = new ArrayList<>();
+
+		LinearT linT = new LinearT();
+
+		double sumLat = 0;
+		double sumLong = 0;
+
+		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
+
+			sumLat += listIn.get(i);
+			sumLong += listIn.get(i + 1);
+			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
+
+		}
+
+		double meanLat = sumLat / (listIn.size() / 3);
+
+		double meanLong = sumLong / (listIn.size() / 3);
+
+		listMean = coordEcef(meanLat, meanLong, 0); // mean lat long to ecef
+		
+
+		listR1 = linT.rotZ(listOut, (-1 * meanLong) + 90.00); //first rotation about z axis
+		listR2 = linT.rotX(listR1, (meanLat - 90.00)); //second rotation about x axis
+
+		return listOut;
 	}
 
 }

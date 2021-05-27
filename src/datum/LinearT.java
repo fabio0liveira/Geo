@@ -11,7 +11,8 @@ import java.util.List;
 public class LinearT {
 
 	/**
-	 * rotX, rotY, rotZ - Linear transformations for a 3D cartesian dextrogyre system.
+	 * rotX, rotY, rotZ - Linear transformations for a 3D cartesian dextrogyre
+	 * system.
 	 * 
 	 * The method receives a list of elements{x,y,z,x,y,z,...} and the angle of
 	 * rotation teta, with negative angles for clockwise rotation and positive
@@ -24,12 +25,11 @@ public class LinearT {
 
 	public List<Double> rotX(List<Double> listIn, double teta) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i));
 			listOut.add(i + 1, listIn.get(i + 1) * cosT + (listIn.get(i + 2) * sinT));
@@ -43,12 +43,11 @@ public class LinearT {
 
 	public List<Double> rotX(List<Double> listIn, double teta, double dx, double dy, double dz) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i) + dx);
 			listOut.add(i + 1, listIn.get(i + 1) * cosT + (listIn.get(i + 2) * sinT) + dy);
@@ -62,12 +61,11 @@ public class LinearT {
 
 	public List<Double> rotY(List<Double> listIn, double teta) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i) * cosT - (listIn.get(i + 2) * sinT));
 			listOut.add(i + 1, listIn.get(i + 1));
@@ -81,12 +79,11 @@ public class LinearT {
 
 	public List<Double> rotY(List<Double> listIn, double teta, double dx, double dy, double dz) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i) * cosT - (listIn.get(i + 2) * sinT) + dx);
 			listOut.add(i + 1, listIn.get(i + 1) + dy);
@@ -100,12 +97,11 @@ public class LinearT {
 
 	public List<Double> rotZ(List<Double> listIn, double teta) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i) * cosT + (listIn.get(i + 1) * sinT));
 			listOut.add(i + 1, (-1 * listIn.get(i) * sinT) + (listIn.get(i + 1) * cosT));
@@ -119,12 +115,11 @@ public class LinearT {
 
 	public List<Double> rotZ(List<Double> listIn, double teta, double dx, double dy, double dz) {
 
-		
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
 
-		for (int i = 0; i < listIn.size(); i = i + 3) {
+		for (int i = 0; i < listIn.size(); i += 3) {
 
 			listOut.add(i, listIn.get(i) * cosT + (listIn.get(i + 1) * sinT) + dx);
 			listOut.add(i + 1, (-1 * listIn.get(i) * sinT) + (listIn.get(i + 1) * cosT) + dy);
