@@ -238,6 +238,7 @@ public class Geocalc extends Elips {
 
 			sumLat += listIn.get(i);
 			sumLong += listIn.get(i + 1);
+
 			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
 
 		}
@@ -256,9 +257,9 @@ public class Geocalc extends Elips {
 
 		}
 
-		listR1 = linT.rotZ(listDxyz, (-1 * meanLong) + 90.00); // first rotation about z axis
+		listR1 = linT.rotZ(listDxyz, (meanLong) + 90.00); // first rotation about z axis
 
-		listR2 = linT.rotX(listR1, (meanLat - 90.00)); // second rotation about x axis
+		listR2 = linT.rotX(listR1, (-1 * meanLat) - 90.00); // second rotation about x axis
 
 		return listR2;
 	}
