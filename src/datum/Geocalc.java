@@ -218,8 +218,8 @@ public class Geocalc extends Elips {
 
 	// FROM DD {lat,long,h,lat,long,h,...} TO TOPOCENTRIC HORIZON COORDINATE SYSTEM
 	// {E,N,U,E,N,U,...} ORIGIN OF TH SYSTEM IS THE MEAN {LAT,LONG,0} COORDS
-	
-	//!!! not finished yet!!!
+
+	// !!! not finished yet!!!
 
 	public List<Double> ddToHorizon(List<Double> listIn) {
 
@@ -227,6 +227,7 @@ public class Geocalc extends Elips {
 		List<Double> listR1 = new ArrayList<>();
 		List<Double> listR2 = new ArrayList<>();
 		List<Double> listMean = new ArrayList<>();
+		List<Double> listDxyz = new ArrayList<>();
 
 		LinearT linT = new LinearT();
 
@@ -246,12 +247,20 @@ public class Geocalc extends Elips {
 		double meanLong = sumLong / (listIn.size() / 3);
 
 		listMean = coordEcef(meanLat, meanLong, 0); // mean lat long to ecef
-		
 
-		listR1 = linT.rotZ(listOut, (-1 * meanLong) + 90.00); //first rotation about z axis
-		listR2 = linT.rotX(listR1, (meanLat - 90.00)); //second rotation about x axis
+		for (int i = 0; i < listIn.size(); i += 3) {
 
-		return listOut;
+			listDxyz.add(i, listOut.get(i) - listMean.get(0));
+			listDxyz.add(i + 1, listOut.get(i + 1) - listMean.get(1));
+			listDxyz.add(i + 2, listOut.get(i + 2) - listMean.get(2));
+
+		}
+
+		listR1 = linT.rotZ(listDxyz, (-1 * meanLong) + 90.00); // first rotation about z axis
+
+		listR2 = linT.rotX(listR1, (meanLat - 90.00)); // second rotation about x axis
+
+		return listR2;
 	}
 
 }
