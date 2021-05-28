@@ -21,48 +21,21 @@ public class Program {
 
 		// teste 0de886b7-3412-4c81-a637-75aa8d9e33f5
 
-		coord[0] = -6.00;
-		coord[1] = 19;
-		coord[2] = 45.7;
-		listIn.add(0, geo.dmsTodd(coord));
-		coord[0] = -35.00;
-		coord[1] = 28;
-		coord[2] = 24.327;
-		listIn.add(1, geo.dmsTodd(coord));
-		listIn.add(2, 90.424);
+		
+		listIn.add(0, -19.00);
+		listIn.add(1, -39.00);
+		listIn.add(2, 0.00);
+		listIn.add(3, -19.01);
+		listIn.add(4, -39.01);
+		listIn.add(5, 0.00);
+		listIn.add(6, -18.99);
+		listIn.add(7, -38.99);
+		listIn.add(8, 0.00);
+		
+		
 
-		coord[0] = -6.00;
-		coord[1] = 19;
-		coord[2] = 48.674;
-		listIn.add(3, geo.dmsTodd(coord));
-		coord[0] = -35.00;
-		coord[1] = 28;
-		coord[2] = 23.011;
-		listIn.add(4, geo.dmsTodd(coord));
-		listIn.add(5, 91.692);
-
-		coord[0] = -6.00;
-		coord[1] = 19;
-		coord[2] = 49.991;
-		listIn.add(6, geo.dmsTodd(coord));
-		coord[0] = -35.00;
-		coord[1] = 28;
-		coord[2] = 25.985;
-		listIn.add(7, geo.dmsTodd(coord));
-		listIn.add(8, 88.631);
-
-		coord[0] = -6.00;
-		coord[1] = 19;
-		coord[2] = 47.015;
-		listIn.add(9, geo.dmsTodd(coord));
-		coord[0] = -35.00;
-		coord[1] = 28;
-		coord[2] = 27.301;
-		listIn.add(10, geo.dmsTodd(coord));
-		listIn.add(11, 85.488);
-
-		System.out.println(geo.ddToHorizon(listIn));
-		System.out.println(geo.gaussArea(geo.ddToHorizon(listIn))/10000);
+		//System.out.println(geo.ddToHorizon(listIn));
+		geo.ddToHorizon(listIn);
 
 	}
 

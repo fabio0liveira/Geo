@@ -257,9 +257,11 @@ public class Geocalc extends Elips {
 
 		}
 
-		listR1 = linT.rotZ(listDxyz, (meanLong) + 90.00); // first rotation about z axis
+		System.out.println(listDxyz);System.out.println(meanLong);System.out.println(meanLat);System.out.println();
 
-		listR2 = linT.rotX(listR1, (-1 * meanLat) - 90.00); // second rotation about x axis
+		listR1 = linT.rotZ(listDxyz,  -1*(Math.abs(meanLong)+ 90.00) ); // first rotation about z axis
+
+		listR2 = linT.rotX(listR1, -1*(Math.abs(meanLat)- 90.00) ); // second rotation about x axis
 
 		return listR2;
 	}
