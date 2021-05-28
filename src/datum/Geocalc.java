@@ -228,26 +228,33 @@ public class Geocalc extends Elips {
 		List<Double> listR2 = new ArrayList<>();
 		List<Double> listMean = new ArrayList<>();
 		List<Double> listDxyz = new ArrayList<>();
+		List<Double> listR3 = new ArrayList<>();
 
 		LinearT linT = new LinearT();
 
 		double sumLat = 0;
 		double sumLong = 0;
+		// double sumH = 0;
 
 		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
 
 			sumLat += listIn.get(i);
 			sumLong += listIn.get(i + 1);
+			// sumH += listIn.get(i+2);
 
 			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
 
 		}
 
-		double meanLat = sumLat / (listIn.size() / 3);
+		System.out.println(listOut);
+		// double meanLat = sumLat / (listIn.size() / 3);
 
-		double meanLong = sumLong / (listIn.size() / 3);
+		// double meanLong = sumLong / (listIn.size() / 3);
 
-		listMean = coordEcef(meanLat, meanLong, 0); // mean lat long to ecef
+		// double meanH = sumH / (listIn.size() / 3);
+
+		listMean = coordEcef(-29.9323145027778, -55.7470058611111, 173.45679); // mean lat long to ecef
+		System.out.println(listMean);
 
 		for (int i = 0; i < listIn.size(); i += 3) {
 
@@ -257,11 +264,19 @@ public class Geocalc extends Elips {
 
 		}
 
-		System.out.println(listDxyz);System.out.println(meanLong);System.out.println(meanLat);System.out.println();
+		System.out.println(listDxyz);
+		System.out.println(-55.7470058611111);
+		System.out.println(-29.9323145027778);
+		System.out.println();
 
-		listR1 = linT.rotZ(listDxyz,  -1*(Math.abs(meanLong)+ 90.00) ); // first rotation about z axis
+		listR1 = linT.rotZ(listDxyz, -1*((Math.abs(-55.7470058611111) + 90.00))); // first rotation about z axis
 
-		listR2 = linT.rotX(listR1, -1*(Math.abs(meanLat)- 90.00) ); // second rotation about x axis
+		listR2 = linT.rotX(listR1, (90 - (Math.abs(-29.9323145027778)))); // second rotation about x axis
+		
+		//180 y
+		
+		listR3 = linT.rotY(listR2, 180);
+		System.out.println(listR3);
 
 		return listR2;
 	}
