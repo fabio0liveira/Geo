@@ -26,7 +26,6 @@ public class LinearT {
 
 	public List<Double> rotX(List<Double> listIn, double teta) {
 
-		System.out.println(teta);
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
@@ -39,7 +38,6 @@ public class LinearT {
 
 		}
 
-		System.out.println(listOut);
 		return listOut;
 
 	}
@@ -100,7 +98,6 @@ public class LinearT {
 
 	public List<Double> rotZ(List<Double> listIn, double teta) {
 
-		System.out.println(teta);
 		double sinT = Math.sin(Math.toRadians(teta));
 		double cosT = Math.cos(Math.toRadians(teta));
 		List<Double> listOut = new ArrayList<>();
@@ -112,7 +109,6 @@ public class LinearT {
 			listOut.add(i + 2, listIn.get(i + 2));
 
 		}
-		System.out.println(listOut);
 
 		return listOut;
 

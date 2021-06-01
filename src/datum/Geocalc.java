@@ -217,7 +217,7 @@ public class Geocalc extends Elips {
 	}
 
 	// FROM DD {lat,long,h,lat,long,h,...} TO TOPOCENTRIC HORIZON COORDINATE SYSTEM
-	// {E,N,U,E,N,U,...} ORIGIN OF TH SYSTEM IS THE MEAN {LAT,LONG,0} COORDS
+	// {E,N,U,E,N,U,...} ORIGIN OF THE SYSTEM IS THE MEAN {X,Y,Z} COORDS
 
 	// !!! not finished yet!!!
 
@@ -226,35 +226,35 @@ public class Geocalc extends Elips {
 		List<Double> listOut = new ArrayList<>();
 		List<Double> listR1 = new ArrayList<>();
 		List<Double> listR2 = new ArrayList<>();
+		List<Double> listR3 = new ArrayList<>();
 		List<Double> listMean = new ArrayList<>();
 		List<Double> listDxyz = new ArrayList<>();
-		List<Double> listR3 = new ArrayList<>();
 
 		LinearT linT = new LinearT();
 
 		double sumLat = 0;
 		double sumLong = 0;
-		// double sumH = 0;
+		double sumH = 0;
 
 		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
 
 			sumLat += listIn.get(i);
 			sumLong += listIn.get(i + 1);
-			// sumH += listIn.get(i+2);
+			sumH += listIn.get(i + 2);
 
 			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
 
 		}
 
-		System.out.println(listOut);
-		// double meanLat = sumLat / (listIn.size() / 3);
-
-		// double meanLong = sumLong / (listIn.size() / 3);
-
-		// double meanH = sumH / (listIn.size() / 3);
-
-		listMean = coordEcef(-29.9323145027778, -55.7470058611111, 173.45679); // mean lat long to ecef
+		double meanLat = sumLat / (listIn.size() / 3);
+		double meanLong = sumLong / (listIn.size() / 3);
+		double meanH = sumH / (listIn.size() / 3);
+		
+		
+		listMean.addAll(coordEcef(meanLat,meanLong,meanH) );
 		System.out.println(listMean);
+		
+		
 
 		for (int i = 0; i < listIn.size(); i += 3) {
 
@@ -264,21 +264,13 @@ public class Geocalc extends Elips {
 
 		}
 
-		System.out.println(listDxyz);
-		System.out.println(-55.7470058611111);
-		System.out.println(-29.9323145027778);
-		System.out.println();
+		listR1 = linT.rotZ(listDxyz, -1 * ((Math.abs(meanLong) + 90.00))); // first rotation about z axis
 
-		listR1 = linT.rotZ(listDxyz, -1*((Math.abs(-55.7470058611111) + 90.00))); // first rotation about z axis
+		listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // second rotation about x axis
 
-		listR2 = linT.rotX(listR1, (90 - (Math.abs(-29.9323145027778)))); // second rotation about x axis
-		
-		//180 y
-		
-		listR3 = linT.rotY(listR2, 180);
-		System.out.println(listR3);
+		listR3 = linT.rotY(listR2, 180); // 180 y
 
-		return listR2;
+		return listR3;
 	}
 
 }
