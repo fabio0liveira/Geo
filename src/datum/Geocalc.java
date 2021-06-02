@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import Jama.Matrix;
 import datum.LinearT;
 
 /**
@@ -249,12 +250,8 @@ public class Geocalc extends Elips {
 		double meanLat = sumLat / (listIn.size() / 3);
 		double meanLong = sumLong / (listIn.size() / 3);
 		double meanH = sumH / (listIn.size() / 3);
-		
-		
-		listMean.addAll(coordEcef(meanLat,meanLong,meanH) );
-		System.out.println(listMean);
-		
-		
+
+		listMean.addAll(coordEcef(meanLat, meanLong, meanH));
 
 		for (int i = 0; i < listIn.size(); i += 3) {
 
@@ -271,6 +268,70 @@ public class Geocalc extends Elips {
 		listR3 = linT.rotY(listR2, 180); // 180 y
 
 		return listR3;
+	}
+
+	public List<Double> topoLocal(List<Double> listIn) {
+
+		List<Double> listOut = new ArrayList<>();
+		List<Double> listRot = new ArrayList<>();
+		List<Double> listMean = new ArrayList<>();
+		List<Double> listDxyz = new ArrayList<>();
+
+		double sumLat = 0;
+		double sumLong = 0;
+		double sumH = 0;
+
+		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
+
+			sumLat += listIn.get(i);
+			sumLong += listIn.get(i + 1);
+			sumH += listIn.get(i + 2);
+
+			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
+
+		}
+
+		double meanLat = sumLat / (listIn.size() / 3);
+		double meanLong = sumLong / (listIn.size() / 3);
+		double meanH = sumH / (listIn.size() / 3);
+
+		listMean.addAll(coordEcef(meanLat, meanLong, meanH));
+
+		for (int i = 0; i < listIn.size(); i += 3) {
+
+			listDxyz.add(i, listOut.get(i) - listMean.get(0));
+			listDxyz.add(i + 1, listOut.get(i + 1) - listMean.get(1));
+			listDxyz.add(i + 2, listOut.get(i + 2) - listMean.get(2));
+
+		}
+
+		double sinFi = Math.sin(Math.toRadians(meanLat));
+		double mSinLambda = -1 * (Math.sin(Math.toRadians(meanLong)));
+		double cosFi = Math.cos(Math.toRadians(meanLat));
+		double mCosFi = -1 * (Math.cos(Math.toRadians(meanLat)));
+		double cosLambda = Math.cos(Math.toRadians(meanLong));
+		double mCosLambda = -1 * (Math.cos(Math.toRadians(meanLong)));
+
+		double[][] valsRot1 = { { 1., 0., 0. }, { 0., sinFi, cosFi }, { 0., mCosFi, sinFi } };
+		double[][] valsRot2 = { { mSinLambda, cosLambda, 0. }, { mCosLambda, mSinLambda, 0. }, { 0., 0., 1. } };
+
+		Matrix rot1 = new Matrix(valsRot1);
+		Matrix rot2 = new Matrix(valsRot2);
+		Matrix rot1rot2 = new Matrix(3, 3);
+
+		rot1rot2 = rot1.times(rot2);
+
+		for (int i = 0; i < listDxyz.size(); i += 3) {
+
+			double[] valsdxyz = { listDxyz.get(i), listDxyz.get(i + 1), listDxyz.get(i + 2) };
+			Matrix dxyz = new Matrix(valsdxyz, 3);
+
+			listRot.add(i, (rot1rot2.times(dxyz)).get(0, 0));
+			listRot.add(i + 1, (rot1rot2.times(dxyz)).get(1, 0));
+			listRot.add(i + 2, (rot1rot2.times(dxyz)).get(2, 0));
+
+		}
+		return listRot;
 	}
 
 }
