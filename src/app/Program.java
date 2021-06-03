@@ -17,6 +17,8 @@ public class Program {
 		// LinearT linT = new LinearT();
 
 		List<Double> listIn = new ArrayList<>();
+		List<Double> listIn2 = new ArrayList<>();
+		List<Double> listIn3 = new ArrayList<>();
 
 		listIn.add(0, -29.9256478361111);
 		listIn.add(1, -55.7397836388889);
@@ -51,9 +53,28 @@ public class Program {
 		System.out.println(geo.topoLocal(listIn));
 		System.out.println("---------------------------------------------------------------------");
 
-		System.out.println(geo.gaussArea(geo.ddToHorizon(listIn)));
+		int j = 0;
+		for (int i = 0; i < (geo.ddToHorizon(listIn)).size(); i += 3) {
+
+			listIn2.add(j, (geo.ddToHorizon(listIn)).get(i));
+			listIn2.add(j + 1, (geo.ddToHorizon(listIn)).get(i + 1));
+			j += 2;
+
+		}
+
+		System.out.println(geo.gaussArea(listIn2));
 		System.out.println();
-		System.out.println(geo.gaussArea(geo.topoLocal(listIn)));
+		
+		j = 0;
+		for (int i = 0; i < (geo.topoLocal(listIn)).size(); i += 3) {
+
+			listIn3.add(j, (geo.topoLocal(listIn)).get(i));
+			listIn3.add(j + 1, (geo.topoLocal(listIn)).get(i + 1));
+			j += 2;
+
+		}
+		
+		System.out.println(geo.gaussArea(listIn3));
 
 	}
 

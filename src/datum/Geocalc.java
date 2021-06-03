@@ -12,7 +12,7 @@ import datum.LinearT;
  * 
  * @author Fabio Cardoso de Oliveira
  * 
- * @version 1.3
+ * @version 1.4
  * 
  */
 
@@ -220,8 +220,6 @@ public class Geocalc extends Elips {
 	// FROM DD {lat,long,h,lat,long,h,...} TO TOPOCENTRIC HORIZON COORDINATE SYSTEM
 	// {E,N,U,E,N,U,...} ORIGIN OF THE SYSTEM IS THE MEAN {X,Y,Z} COORDS
 
-	// !!! not finished yet!!!
-
 	public List<Double> ddToHorizon(List<Double> listIn) {
 
 		List<Double> listOut = new ArrayList<>();
@@ -237,7 +235,7 @@ public class Geocalc extends Elips {
 		double sumLong = 0;
 		double sumH = 0;
 
-		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
+		for (int i = 0; i < listIn.size(); i += 3) { // TO ECEF
 
 			sumLat += listIn.get(i);
 			sumLong += listIn.get(i + 1);
@@ -261,11 +259,11 @@ public class Geocalc extends Elips {
 
 		}
 
-		listR1 = linT.rotZ(listDxyz, -1 * ((Math.abs(meanLong) + 90.00))); // first rotation about z axis
+		listR1 = linT.rotZ(listDxyz, -1 * ((Math.abs(meanLong) + 90.00))); // 1ST ROTATION OVER Z AXIS
 
-		listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // second rotation about x axis
+		listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // 2ND ROTATION OVER X AXIS
 
-		listR3 = linT.rotY(listR2, 180); // 180 y
+		listR3 = linT.rotY(listR2, 180); // 3RD ROTATION 180DEG OVER Y AXIS (SOUTH HEMISPHERE)
 
 		return listR3;
 	}
@@ -281,7 +279,7 @@ public class Geocalc extends Elips {
 		double sumLong = 0;
 		double sumH = 0;
 
-		for (int i = 0; i < listIn.size(); i += 3) { // to ecef
+		for (int i = 0; i < listIn.size(); i += 3) { // TO ECEF
 
 			sumLat += listIn.get(i);
 			sumLong += listIn.get(i + 1);
@@ -304,6 +302,8 @@ public class Geocalc extends Elips {
 			listDxyz.add(i + 2, listOut.get(i + 2) - listMean.get(2));
 
 		}
+
+		// USING JAMA PACK FROM HERE
 
 		double sinFi = Math.sin(Math.toRadians(meanLat));
 		double mSinLambda = -1 * (Math.sin(Math.toRadians(meanLong)));

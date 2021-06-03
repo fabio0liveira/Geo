@@ -17,10 +17,10 @@ public class LinearT {
 	 * 
 	 * The method receives a list of elements{x,y,z,x,y,z,...} and the angle of
 	 * rotation teta, with negative angles for clockwise rotation and positive
-	 * angles for counter clockwise rotation. rotX is the rotation arround de X axi,
-	 * rotY rotation arround Y axi and rotZ arround Z axi. For translation enter the
+	 * angles for counter clockwise rotation. rotX is the rotation over X axi,
+	 * rotY rotation over Y axi and rotZ over Z axi. For translation enter the
 	 * dx, dy and dz values too. For a 2D system transformation just use rotZ
-	 * passing 0 value to Z coordinate.
+	 * passing 0.00 value to Z coordinate.
 	 * 
 	 */
 
