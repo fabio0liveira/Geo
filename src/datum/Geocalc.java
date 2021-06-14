@@ -4,15 +4,12 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import Jama.Matrix;
-import datum.LinearT;
-
 /**
  * This class implements methods for use on geodesic calculations.
  * 
  * @author Fabio Cardoso de Oliveira
  * 
- * @version 1.4
+ * @version 1.5
  * 
  */
 
@@ -174,7 +171,7 @@ public class Geocalc extends Elips {
 
 	}
 
-	// AREA CALCULATION BY GAUSS METHOD LIST{X,Y,X,Y,...}
+	// AREA CALCULATION BY GAUSS's METHOD. LIST{X,Y,X,Y,...}
 
 	public double gaussArea(List<Double> list) {
 
@@ -218,7 +215,7 @@ public class Geocalc extends Elips {
 	}
 
 	// FROM DD {lat,long,h,lat,long,h,...} TO TOPOCENTRIC HORIZON COORDINATE SYSTEM
-	// {E,N,U,E,N,U,...} ORIGIN OF THE SYSTEM IS THE MEAN {X,Y,Z} COORDS
+	// {E,N,U,E,N,U,...}. THE ORIGIN OF THE SYSTEM IS THE MEAN {X,Y,Z} COORDS
 
 	public List<Double> ddToHorizon(List<Double> listIn) {
 
@@ -259,79 +256,30 @@ public class Geocalc extends Elips {
 
 		}
 
-		listR1 = linT.rotZ(listDxyz, -1 * ((Math.abs(meanLong) + 90.00))); // 1ST ROTATION OVER Z AXIS
+		if (meanLong < 0) {
 
-		listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // 2ND ROTATION OVER X AXIS
+			listR1 = linT.rotZ(listDxyz, -1 * ((Math.abs(meanLong) + 90.00))); // 1ST ROTATION AROUND Z AXIS
 
-		listR3 = linT.rotY(listR2, 180); // 3RD ROTATION 180DEG OVER Y AXIS (SOUTH HEMISPHERE)
+			listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // 2ND ROTATION AROUND X AXIS
+
+			listR3 = linT.rotY(listR2, 180); // 3RD ROTATION 180DEG AROUND Y AXIS (SOUTH HEMISPHERE)
+
+		}
+
+		if (meanLong >= 0) {
+
+			listR1 = linT.rotZ(listDxyz, ((Math.abs(meanLong) + 90.00))); // 1ST ROTATION AROUND Z AXIS
+
+			listR2 = linT.rotX(listR1, (90 - (Math.abs(meanLat)))); // 2ND ROTATION AROUND X AXIS
+
+			listR3 = listR2;
+
+		}
 
 		return listR3;
+
 	}
 
-	public List<Double> topoLocal(List<Double> listIn) {
-
-		List<Double> listOut = new ArrayList<>();
-		List<Double> listRot = new ArrayList<>();
-		List<Double> listMean = new ArrayList<>();
-		List<Double> listDxyz = new ArrayList<>();
-
-		double sumLat = 0;
-		double sumLong = 0;
-		double sumH = 0;
-
-		for (int i = 0; i < listIn.size(); i += 3) { // TO ECEF
-
-			sumLat += listIn.get(i);
-			sumLong += listIn.get(i + 1);
-			sumH += listIn.get(i + 2);
-
-			listOut.addAll(coordEcef(listIn.get(i), listIn.get(i + 1), listIn.get(i + 2)));
-
-		}
-
-		double meanLat = sumLat / (listIn.size() / 3);
-		double meanLong = sumLong / (listIn.size() / 3);
-		double meanH = sumH / (listIn.size() / 3);
-
-		listMean.addAll(coordEcef(meanLat, meanLong, meanH));
-
-		for (int i = 0; i < listIn.size(); i += 3) {
-
-			listDxyz.add(i, listOut.get(i) - listMean.get(0));
-			listDxyz.add(i + 1, listOut.get(i + 1) - listMean.get(1));
-			listDxyz.add(i + 2, listOut.get(i + 2) - listMean.get(2));
-
-		}
-
-		// USING JAMA PACK FROM HERE
-
-		double sinFi = Math.sin(Math.toRadians(meanLat));
-		double mSinLambda = -1 * (Math.sin(Math.toRadians(meanLong)));
-		double cosFi = Math.cos(Math.toRadians(meanLat));
-		double mCosFi = -1 * (Math.cos(Math.toRadians(meanLat)));
-		double cosLambda = Math.cos(Math.toRadians(meanLong));
-		double mCosLambda = -1 * (Math.cos(Math.toRadians(meanLong)));
-
-		double[][] valsRot1 = { { 1., 0., 0. }, { 0., sinFi, cosFi }, { 0., mCosFi, sinFi } };
-		double[][] valsRot2 = { { mSinLambda, cosLambda, 0. }, { mCosLambda, mSinLambda, 0. }, { 0., 0., 1. } };
-
-		Matrix rot1 = new Matrix(valsRot1);
-		Matrix rot2 = new Matrix(valsRot2);
-		Matrix rot1rot2 = new Matrix(3, 3);
-
-		rot1rot2 = rot1.times(rot2);
-
-		for (int i = 0; i < listDxyz.size(); i += 3) {
-
-			double[] valsdxyz = { listDxyz.get(i), listDxyz.get(i + 1), listDxyz.get(i + 2) };
-			Matrix dxyz = new Matrix(valsdxyz, 3);
-
-			listRot.add(i, (rot1rot2.times(dxyz)).get(0, 0));
-			listRot.add(i + 1, (rot1rot2.times(dxyz)).get(1, 0));
-			listRot.add(i + 2, (rot1rot2.times(dxyz)).get(2, 0));
-
-		}
-		return listRot;
-	}
+	
 
 }
